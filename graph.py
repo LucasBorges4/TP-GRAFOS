@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+
 def main(args):
     from sys import stderr, exit
     import networkx as nx
+    import ordemGrafo, tamanhoGrafo, vizinhosVertice, grauVertice, sequenciaGraus, excentricidadeVertice, raioGrafo
+
     try:
         # Leitura do grafo em GraphML
         graph = nx.read_graphml(args[0])
@@ -32,17 +35,36 @@ def main(args):
 
         # Leitura da operação desejada
         op = int(input("Digite o número da opção escolhida: "))
+        
         if op < 0 and op > 14:
             print("Opção não reconhecida, tente novamente")
             continue
 
         # Realização da operação desejada
         if op == 1:
-            ordem = graph.number_of_nodes()
+            ordem = ordemGrafo.ordemGrafo(graph)
             print(f"Ordem do grafo: {ordem}")
         elif op == 2:
-            tam = graph.number_of_edges()
+            tam = tamanhoGrafo.tamanhoGrafo(graph)
             print(f"Tamanho do grafo: {tam}")
+        elif op == 3:
+            vertice = input("Digite o vértice: ")
+            vizinhos = vizinhosVertice.vizinhosVertice(graph, vertice)
+            print(f"Vizinhos do vértice {vertice}: {vizinhos}")
+        elif op == 4:
+            vertice = input("Digite o vértice: ")
+            grau = grauVertice.grauVertice(graph, vertice)
+            print(f"Grau do vértice {vertice}: {grau}")
+        elif op == 5:
+            sequenciaGraus = sequenciaGraus.sequenciaGraus(graph)
+            print(f"Sequência de graus do grafo: {sequenciaGraus}")
+        elif op == 6:
+            vertice = input("Digite o vértice: ")
+            excentricidade = excentricidadeVertice.excentricidadeVertice(graph, vertice)
+            print(f"Excentricidade do vértice {vertice}: {excentricidade}")
+        elif op == 7:
+            raioGrafo = raioGrafo.raioGrafo(graph)
+            print(f"Raio do grafo: {raioGrafo}")
         elif op == 14:
             print("Saindo...")
             break
