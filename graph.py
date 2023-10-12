@@ -4,18 +4,22 @@
 def main(args):
     from sys import stderr, exit
     import networkx as nx
-    import ordemGrafo, tamanhoGrafo, vizinhosVertice, grauVertice, sequenciaGraus, excentricidadeVertice, raioGrafo
+    import matplotlib.pyplot as plt
 
     try:
         # Leitura do grafo em GraphML
         graph = nx.read_graphml(args[0])
         print(f"Grafo {args[0]} lido com sucesso!")
+        nx.draw(graph, with_labels=True, font_weight='bold')
+        plt.show()
     except nx.NetworkXError:
         # Ocorreu algum erro (i.e. o arquivo não é válido)
         print(f"Não foi possível ler o grafo {args[0]}...", file=stderr)
         exit(1)
 
-    while True:
+    prossiga = True
+
+    while prossiga:
         # Menu bem simples
         print("== OPERAÇÕES ==")
         print("1. Obter a ordem do grafo")
@@ -42,29 +46,35 @@ def main(args):
 
         # Realização da operação desejada
         if op == 1:
-            ordem = ordemGrafo.ordemGrafo(graph)
-            print(f"Ordem do grafo: {ordem}")
+            ordemGrafo = graph.number_of_nodes()
+            print(f"Ordem do grafo: {ordemGrafo}")
         elif op == 2:
-            tam = tamanhoGrafo.tamanhoGrafo(graph)
-            print(f"Tamanho do grafo: {tam}")
+            tamanhoGrafo = graph.number_of_edges()
+            print(f"Tamanho do grafo: {tamanhoGrafo}")
         elif op == 3:
             vertice = input("Digite o vértice: ")
-            vizinhos = vizinhosVertice.vizinhosVertice(graph, vertice)
+            vizinhos = list(graph.neighbors(vertice))
             print(f"Vizinhos do vértice {vertice}: {vizinhos}")
         elif op == 4:
             vertice = input("Digite o vértice: ")
-            grau = grauVertice.grauVertice(graph, vertice)
+            grau = graph.degree(vertice)
             print(f"Grau do vértice {vertice}: {grau}")
         elif op == 5:
-            sequenciaGraus = sequenciaGraus.sequenciaGraus(graph)
+            sequenciaGraus = sorted([grau for vertice, grau in graph.degree()], reverse=True)
             print(f"Sequência de graus do grafo: {sequenciaGraus}")
         elif op == 6:
             vertice = input("Digite o vértice: ")
-            excentricidade = excentricidadeVertice.excentricidadeVertice(graph, vertice)
+            excentricidade = nx.eccentricity(graph, v=vertice)
             print(f"Excentricidade do vértice {vertice}: {excentricidade}")
         elif op == 7:
-            raioGrafo = raioGrafo.raioGrafo(graph)
-            print(f"Raio do grafo: {raioGrafo}")
+            raio = nx.radius(graph)
+            print(f"Raio do grafo: {raio}")
+        elif op == 8:
+            diametroGrafo = nx.diameter(graph)
+            print(f"Diâmetro do grafo: {diametroGrafo}")
+        elif op == 9:
+            centroGrafo = nx.center(graph)
+            print(f"Centro do grafo: {centroGrafo}")
         elif op == 14:
             print("Saindo...")
             break
@@ -74,6 +84,10 @@ def main(args):
         print()
 
 
+        prossiga = input("Deseja realizar outra operação? (s/n) ") == "s"
+        print("\n")
+
+    print("Fim da execução!")
 if __name__ == "__main__":
     from sys import argv
     main(argv[1:])
