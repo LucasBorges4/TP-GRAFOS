@@ -8,4 +8,6 @@ pacote NetworkX. Assumindo que o python esteja instalado:
 $ pip install networkx
 # Para executar o programa com um arquivo GraphML:
 $ python3 graph.py ./exemplo.graphml
+# Para Archlinux-Users use o comando:
+# pacman -S python-xyz -- onde xyz é o nome do pacote para instalar o pacote desejado
 ```
