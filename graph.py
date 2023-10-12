@@ -50,22 +50,29 @@ def main(args):
             print(f"Tamanho do grafo: {tam}")
             
         elif op == 6:
+            # Cálculo da excentricidade de acordo com o vértice.
             vertices = list(graph.nodes())
+            TAM = vertices.__len__()
+            print(TAM)
             nodo_escolhido = int(input("Qual nodo você deseja escolher para calcular a excentricidade?"))
-            excentricidade = excentricidade_Do_Vertice(graph, vertices[nodo_escolhido])
+            excentricidade = excentricidade_Do_Vertice(graph, vertices[nodo_escolhido - 1])
             print(f"Excentricidade do grafo: {excentricidade}")
         
         elif op == 7:
+            # Raio do Grafo.
             raio = raio_Do_Grafo(graph)
             print(f"Raio do grafo: {raio}")
         
         elif op == 8:
+            # Diametro do Grafo.
             diametro = diametro_Do_Grafo(graph)
             print(f"Diametro do grafo: {diametro}")
         
         elif op == 9:
+            # Centro do grafo, mostra a posição do grafo.
             centro = centro_Do_Grafo(graph)
-            print(f"Centro do grafo: {centro}")
+            centro = int(centro[0]) + 1
+            print(f"Posição do centro do grafo: {centro}")
         
         elif op == 14:
             print("Saindo...")
