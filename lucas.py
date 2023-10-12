@@ -14,4 +14,4 @@ def diametro_Do_Grafo(grafo):
 
 def centro_Do_Grafo(grafo):
     centro_Do_Grafo = nx.center(grafo)
-    return 1
+    return centro_Do_Grafo

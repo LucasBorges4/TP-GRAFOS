@@ -56,16 +56,16 @@ def main(args):
             print(f"Excentricidade do grafo: {excentricidade}")
         
         elif op == 7:
-            raio_Do_Grafo = raio_Do_Grafo(graph)
-            print(f"Raio do grafo: {raio_Do_Grafo}")
+            raio = raio_Do_Grafo(graph)
+            print(f"Raio do grafo: {raio}")
         
         elif op == 8:
-            diametro_Do_Grafo = diametro_Do_Grafo(graph)
-            print(f"Diametro do grafo: {diametro_Do_Grafo}")
+            diametro = diametro_Do_Grafo(graph)
+            print(f"Diametro do grafo: {diametro}")
         
         elif op == 9:
-            centro_Do_Grafo = centro_Do_Grafo(graph)
-            print(f"Centro do grafo: {centro_Do_Grafo}")
+            centro = centro_Do_Grafo(graph)
+            print(f"Centro do grafo: {centro}")
         
         elif op == 14:
             print("Saindo...")
