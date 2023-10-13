@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+import networkx as nx
+from sys import stderr, exit
+from lib import shortest_path
+
 def main(args):
-    from sys import stderr, exit
-    import networkx as nx
     try:
         # Leitura do grafo em GraphML
         graph = nx.read_graphml(args[0])
@@ -43,6 +45,11 @@ def main(args):
         elif op == 2:
             tam = graph.number_of_edges()
             print(f"Tamanho do grafo: {tam}")
+        elif op == 12:
+            # Caminho mínimo entre dois vértices
+            src = input("Vértice de origem: ")
+            dst = input("Vértice de destino: ")
+            shortest_path(graph, src, dst)
         elif op == 14:
             print("Saindo...")
             break
