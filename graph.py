@@ -2,7 +2,7 @@
 
 import networkx as nx
 from sys import stderr, exit
-from lib import shortest_path
+from lib import busca_largura, shortest_path
 
 def main(args):
     try:
@@ -50,6 +50,10 @@ def main(args):
             src = input("Vértice de origem: ")
             dst = input("Vértice de destino: ")
             shortest_path(graph, src, dst)
+        elif op == 13:
+            src = input("Vértice de origem: ")
+            arq = input("Nome do arquivo da árvore de largura: ")
+            busca_largura(graph, src, arq)
         elif op == 14:
             print("Saindo...")
             break

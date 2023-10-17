@@ -8,7 +8,7 @@ def shortest_path(graph, src, dst):
         if not nx.has_path(graph, src, dst):
             print(f"Distância entre '{src}' e '{dst}' é infinita (sem caminhos)")
             return
-        path = nx.shortest_path(graph, src, dst)
+        path = nx.shortest_path(graph, src, dst, weight="weight")
         print(f"Distância entre '{src}' e '{dst}' é de: {len(path)}")
         print_path("Caminho mínimo entre eles: ", path)
     except nx.NodeNotFound:
@@ -23,3 +23,14 @@ def print_path(prompt, path):
     for v in path[1:]:
         print(f" -> {v}", end="")
     print()
+
+def busca_largura(graph, src, arq):
+    tree = nx.bfs_tree(graph, src)
+    # Determina ordem de vértices percorridos
+    for v in nx.topological_sort(tree):
+        print(v)
+    # Determina as arestas que não fazem parte da árvore de largura
+    for edge in graph.edges():
+        if edge not in tree.edges():
+            print(edge)
+    nx.write_graphml(tree, arq)
