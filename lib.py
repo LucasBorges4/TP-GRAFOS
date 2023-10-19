@@ -34,3 +34,11 @@ def busca_largura(graph, src, arq):
         if edge not in tree.edges():
             print(edge)
     nx.write_graphml(tree, arq)
+
+def centralidade_proximidade(graph, x):
+    acc = 0
+    for y in graph.nodes():
+        dist = nx.shortest_path_length(graph, source=x, target=y)
+        acc += dist # type: ignore
+    res = (graph.number_of_nodes() - 1) / acc
+    return res

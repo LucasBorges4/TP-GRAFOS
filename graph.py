@@ -2,7 +2,7 @@
 
 import networkx as nx
 from sys import stderr, exit
-from lib import busca_largura, shortest_path
+from lib import busca_largura, centralidade_proximidade, shortest_path
 
 def main(args):
     try:
@@ -45,15 +45,21 @@ def main(args):
         elif op == 2:
             tam = graph.number_of_edges()
             print(f"Tamanho do grafo: {tam}")
+        elif op == 11:
+            # Busca em largura
+            src = input("Vértice de origem: ")
+            arq = input("Nome do arquivo da árvore de largura: ")
+            busca_largura(graph, src, arq)
         elif op == 12:
             # Caminho mínimo entre dois vértices
             src = input("Vértice de origem: ")
             dst = input("Vértice de destino: ")
             shortest_path(graph, src, dst)
         elif op == 13:
-            src = input("Vértice de origem: ")
-            arq = input("Nome do arquivo da árvore de largura: ")
-            busca_largura(graph, src, arq)
+            # Centralidade de proximidade
+            x = input("Vértice: ")
+            res = centralidade_proximidade(graph, x)
+            print(f"Centralidade de proximidade de {x}: {res}")
         elif op == 14:
             print("Saindo...")
             break
