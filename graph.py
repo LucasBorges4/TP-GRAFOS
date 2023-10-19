@@ -3,6 +3,7 @@
 import lib
 import networkx as nx
 from sys import stderr, exit
+import matplotlib.pyplot as plt
 
 OPS = {
     1 : "Ordem do grafo"               ,
@@ -22,12 +23,23 @@ OPS = {
 def executar_op(op: int, G: nx.Graph):
     if op == 1:
         # Ordem do grafo
-        ordem = G.number_of_nodes()
-        print(f"Ordem do grafo: {ordem}")
+        ordemGrafo = G.number_of_nodes()
+        print(f"Ordem do grafo: {ordemGrafo}")
     elif op == 2:
         # Tamanho do grafo
-        tam = G.number_of_edges()
-        print(f"Tamanho do grafo: {tam}")
+        tamanhoGrafo = G.number_of_edges()
+        print(f"Tamanho do grafo: {tamanhoGrafo}")
+    elif op == 3:
+        vertice = input("Digite o vértice: ")
+        vizinhos = list(G.neighbors(vertice))
+        print(f"Vizinhos do vértice {vertice}: {vizinhos}")
+    elif op == 4:
+        vertice = input("Digite o vértice: ")
+        grau = G.degree(vertice)
+        print(f"Grau do vértice {vertice}: {grau}")
+    elif op == 5:
+        sequenciaGraus = sorted([grau for _, grau in G.degree()], reverse=True) # type: ignore
+        print(f"Sequência de graus do grafo: {sequenciaGraus}")
     elif op == 6:
         # Cálculo da excentricidade de acordo com o vértice.
         v = input("Vértice: ")
@@ -39,12 +51,12 @@ def executar_op(op: int, G: nx.Graph):
         print(f"Raio do grafo: {raio}")
     elif op == 8:
         # Diametro do Grafo.
-        diametro = lib.diametro(G)
-        print(f"Diametro do grafo: {diametro}")
+        diametroGrafo = lib.diametro(G)
+        print(f"Diâmetro do grafo: {diametroGrafo}")
     elif op == 9:
         # Centro do grafo, mostra a posição do grafo.
-        centro = lib.centro(G)
-        print(f"Posição do centro do grafo: {centro}")
+        centroGrafo = lib.centro(G)
+        print(f"Centro do grafo: {centroGrafo}")
     elif op == 11:
         # Busca em largura (BFS)
         orig = input("Vértice de origem: ")
@@ -69,6 +81,8 @@ def main(args):
         # Leitura do grafo em GraphML
         G = nx.read_graphml(args[0])
         print(f"Grafo {args[0]} lido com sucesso!")
+        nx.draw(G, with_labels=True, font_weight='bold')
+        plt.show()
     except nx.NetworkXError:
         # Ocorreu algum erro (i.e. o arquivo não é válido)
         print(f"Não foi possível ler o grafo {args[0]}...", file=stderr)
@@ -93,6 +107,7 @@ def main(args):
             print("Ok! Saindo...")
             break
 
+    print("Fim da execução!")
 if __name__ == "__main__":
     from sys import argv
     main(argv[1:])
