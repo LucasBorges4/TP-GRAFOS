@@ -3,42 +3,42 @@
 import networkx as nx
 from sys import stderr
 
-def shortest_path(graph, src, dst):
+def menor_caminho(G: nx.Graph, orig: str, dest: str):
     try:
-        if not nx.has_path(graph, src, dst):
-            print(f"Distância entre '{src}' e '{dst}' é infinita (sem caminhos)")
+        if not nx.has_path(G, orig, dest):
+            print(f"Distância entre {orig} e {dest} é infinita")
             return
-        path = nx.shortest_path(graph, src, dst, weight="weight")
-        print(f"Distância entre '{src}' e '{dst}' é de: {len(path)}")
-        print_path("Caminho mínimo entre eles: ", path)
+        caminho = nx.shortest_path(G, source=orig, target=dest)
+        print(f"Distância entre {orig} e {dest} é {len(caminho)}")
+        exibe_caminho("Caminho mínimo:", caminho)
     except nx.NodeNotFound:
-        if src not in graph.nodes:
-            print(f"ERRO: o vértice '{src}' não existe", file=stderr)
+        if orig not in G.nodes:
+            print(f"ERRO: o vértice '{orig}' não existe", file=stderr)
             return
-        print(f"ERRO: o vértice '{dst}' não existe", file=stderr)
+        print(f"ERRO: o vértice '{dest}' não existe", file=stderr)
 
-def print_path(prompt, path):
-    if len(path) == 0: return # não há o que imprimir
-    print(f"{prompt}{path[0]}", end="")
-    for v in path[1:]:
+def exibe_caminho(nome: str, caminho):
+    if len(caminho) == 0: return # não há o que imprimir
+    print(f"{nome} {caminho[0]}", end="")
+    for v in caminho[1:]:
         print(f" -> {v}", end="")
     print()
 
-def busca_largura(graph, src, arq):
-    tree = nx.bfs_tree(graph, src)
+def busca_largura(G: nx.Graph, orig: str, arq: str):
+    AL = nx.bfs_tree(G, orig)
     # Determina ordem de vértices percorridos
-    for v in nx.topological_sort(tree):
+    for v in nx.topological_sort(AL):
         print(v)
     # Determina as arestas que não fazem parte da árvore de largura
-    for edge in graph.edges():
-        if edge not in tree.edges():
-            print(edge)
-    nx.write_graphml(tree, arq)
+    for aresta in G.edges():
+        if aresta not in AL.edges():
+            print(aresta)
+    nx.write_graphml(AL, arq)
 
-def centralidade_proximidade(graph, x):
+def centralidade_proximidade(G: nx.Graph, x: str) -> float:
     acc = 0
-    for y in graph.nodes():
-        dist = nx.shortest_path_length(graph, source=x, target=y)
+    for y in G.nodes():
+        dist = nx.shortest_path_length(G, source=x, target=y)
         acc += dist # type: ignore
-    res = (graph.number_of_nodes() - 1) / acc
+    res = (G.number_of_nodes() - 1) / acc
     return res
