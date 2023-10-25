@@ -1,26 +1,21 @@
-#!/usr/bin/env python3
-
-import lib
+import lib, createGraph
 import networkx as nx
+import tkinter as tk
+import os
+from tkinter import filedialog
 from sys import stderr, exit
 import matplotlib.pyplot as plt
 
-OPS = {
-    1 : "Ordem do grafo"               ,
-    2 : "Tamanho do grafo"             ,
-    3 : "Vizinhos de um vértice"       ,
-    4 : "Grau de um vértice"           ,
-    5 : "Sequência de graus do grafo"  ,
-    6 : "Excentricidade de um vértice" ,
-    7 : "Raio do grafo"                ,
-    9 : "Diâmetro do grafo"            ,
-    10: "Centro do grafo"              ,
-    11: "Busca em largura (BFS)"       ,
-    12: "Distância e caminho mínimo"   ,
-    13: "Centralidade de proximidade"  ,
-}
+
+def limpar_tela():
+    sistema = os.name
+    if sistema == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
 
 def executar_op(op: int, G: nx.Graph):
+    limpar_tela()
     if op == 1:
         # Ordem do grafo
         ordemGrafo = G.number_of_nodes()
@@ -30,14 +25,17 @@ def executar_op(op: int, G: nx.Graph):
         tamanhoGrafo = G.number_of_edges()
         print(f"Tamanho do grafo: {tamanhoGrafo}")
     elif op == 3:
+        # Vizinhos de um vértice
         vertice = input("Digite o vértice: ")
         vizinhos = list(G.neighbors(vertice))
         print(f"Vizinhos do vértice {vertice}: {vizinhos}")
     elif op == 4:
+        # Grau de um vértice
         vertice = input("Digite o vértice: ")
         grau = G.degree(vertice)
         print(f"Grau do vértice {vertice}: {grau}")
     elif op == 5:
+        # Sequência de graus do grafo
         sequenciaGraus = sorted([grau for _, grau in G.degree()], reverse=True) # type: ignore
         print(f"Sequência de graus do grafo: {sequenciaGraus}")
     elif op == 6:
@@ -57,57 +55,80 @@ def executar_op(op: int, G: nx.Graph):
         # Centro do grafo, mostra a posição do grafo.
         centroGrafo = lib.centro(G)
         print(f"Centro do grafo: {centroGrafo}")
-    elif op == 11:
+    elif op == 10:
         # Busca em largura (BFS)
         orig = input("Vértice de origem: ")
         arq = input("Nome do arquivo da árvore de largura: ")
         lib.busca_largura(G, orig, arq)
-    elif op == 12:
+    elif op == 11:
         # Distância e caminho mínimo
         orig = input("Vértice de origem: ")
         dest = input("Vértice de destino: ")
         lib.menor_caminho(G, orig, dest)
-    elif op == 13:
+    elif op == 12:
         # Centralidade de proximidade
         x = input("Vértice: ")
         res = lib.centralidade_proximidade(G, x)
         print(f"Centralidade de proximidade de {x}: {res}")
+    elif op == 13:
+        # Plotar grafo
+        lib.plotar_grafo(G)
+    elif op == 14:
+        # Plotar árvore de largura
+        root = tk.Tk()
+        root.withdraw()
+        file_path = filedialog.askopenfilename(filetypes=[("GraphML files", "*.graphml")])
+        if file_path:
+            AL = nx.read_graphml(file_path)
+            nx.draw(AL, with_labels=True, font_weight='bold')
+            plt.show()
+
+    elif op == 15:
+        # Plotar grafo com pesos
+        lib.plotar_grafo_com_pesos(G)
+    # elif op == 16:
+    #     # Plotar grafo com pesos e árvore de largura
+    #     root = tk.Tk()
+    #     root.withdraw()
+    #     file_path = filedialog.askopenfilename(filetypes=[("GraphML files", "*.graphml")])
+    #     if file_path:
+    #         AL = nx.read_graphml(file_path)
+    #         nx.draw(AL, with_labels=True, font_weight='bold')
+    #         plt.show()
+    # elif op == 17:
+    #     # Plotar grafo com pesos e caminho mínimo
+    #     root = tk.Tk()
+    #     root.withdraw()
+    #     file_path = filedialog.askopenfilename(filetypes=[("GraphML files", "*.graphml")])
+    #     if file_path:
+    #         AL = nx.read_graphml(file_path)
+    #         nx.draw(AL, with_labels=True, font_weight='bold')
+    #         plt.show()
+    # elif op == 18:
+    #     # Plotar grafo com pesos e centralidade de proximidade
+    #     root = tk.Tk()
+    #     root.withdraw()
+    #     file_path = filedialog.askopenfilename(filetypes=[("GraphML files", "*.graphml")])
+    #     if file_path:
+    #         AL = nx.read_graphml(file_path)
+    #         nx.draw(AL, with_labels=True, font_weight='bold')
+    #         plt.show()
+    elif op == 19:
+        # Voltar
+        return
     else:
         # Operações não implementadas
         print(f"Operação não implementada: '{OPS[op]}'", file=stderr)
 
-def main(args):
-    try:
-        # Leitura do grafo em GraphML
-        G = nx.read_graphml(args[0])
-        print(f"Grafo {args[0]} lido com sucesso!")
-        nx.draw(G, with_labels=True, font_weight='bold')
-        plt.show()
-    except nx.NetworkXError:
-        # Ocorreu algum erro (i.e. o arquivo não é válido)
-        print(f"Não foi possível ler o grafo {args[0]}...", file=stderr)
-        exit(1)
 
-    while True:
-        # Exibição das operações
-        print("== OPERAÇÕES ==")
-        for n, desc in OPS.items():
-            print(f"{n}. {desc}")
+def carregar_grafo():
+    root = tk.Tk()
+    root.withdraw()  # Ocultar a janela principal do tkinter
 
-        # Leitura da operação desejada
-        op = int(input("Digite o número da opção escolhida: "))
-        if op not in OPS:
-            print("Opção não reconhecida, tente novamente")
-            continue
+    file_path = filedialog.askopenfilename(filetypes=[("GraphML files", "*.graphml")])
 
-        # Execução da operação
-        executar_op(op, G)
-        resp = input("\nDeseja executar mais uma operação? (S/n) ")
-        if resp != "S" and resp != "s":
-            print("Ok! Saindo...")
-            break
-
-    print("Fim da execução!")
-if __name__ == "__main__":
-    from sys import argv
-    main(argv[1:])
+    if file_path:
+        graph = nx.read_graphml(file_path)
+        return graph
+    else:
+        return None

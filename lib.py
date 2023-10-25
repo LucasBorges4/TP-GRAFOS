@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-
 import networkx as nx
 from sys import stderr
+import matplotlib.pyplot as plt
 
 def excentricidade(grafo, vertice):
     excentricidade = nx.eccentricity(grafo, v=vertice)
@@ -58,3 +58,22 @@ def centralidade_proximidade(G: nx.Graph, x: str) -> float:
         acc += dist # type: ignore
     res = (G.number_of_nodes() - 1) / acc
     return res
+
+def plotar_grafo_com_pesos(G):
+    try:
+        pos = nx.spring_layout(G)
+
+        labels = nx.get_edge_attributes(G, 'weight')
+        edges = G.edges()
+
+        nx.draw(G, pos, with_labels=True, node_size=500, node_color='lightblue')
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+
+        plt.title("Grafo com Pesos nas Arestas")
+        plt.show()
+    except Exception as e:
+        print(f"Erro ao ler o grafo: {e}")
+
+def plotar_grafo(G):
+    nx.draw(G, with_labels=True, font_weight='bold')
+    plt.show()
