@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import graph, lib, createGraph
+import graph, createGraph
 
 OPS = {
     1 : "Ordem do grafo"               ,
@@ -16,11 +16,10 @@ OPS = {
     12: "Centralidade de proximidade"  ,
     13: "Plotar grafo"                 ,
     14: "Plotar árvore de largura"     ,
-    15: "Plotar grafo com pesos"       ,
-    # 16: "Plotar grafo com pesos e árvore de largura",
-    # 17: "Plotar grafo com pesos e caminho mínimo",
-    # 18: "Plotar grafo com pesos e centralidade de proximidade",
-    19: "Voltar",
+    # 15: "Plotar grafo com pesos e árvore de largura",
+    # 16: "Plotar grafo com pesos e caminho mínimo",
+    # 17: "Plotar grafo com pesos e centralidade de proximidade",
+    18: "Voltar",
 }
 
 def main():

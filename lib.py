@@ -3,20 +3,35 @@ import networkx as nx
 from sys import stderr
 import matplotlib.pyplot as plt
 
+def checa_conexo(G):
+    if G.is_directed() and not nx.is_strongly_connected(G):
+        return False
+    elif not G.is_directed() and not nx.is_connected(G):
+        return False
+    return True
+
 def excentricidade(grafo, vertice):
-    excentricidade = nx.eccentricity(grafo, v=vertice)
+    if not checa_conexo(grafo):
+        raise Exception("O grafo não é conexo!")
+    excentricidade = nx.eccentricity(grafo, v=vertice, weight="weight")
     return excentricidade
 
 def raio(grafo):
-    raio = nx.radius(grafo)
+    if not checa_conexo(grafo):
+        raise Exception("O grafo não é conexo!")
+    raio = nx.radius(grafo, weight="weight")
     return raio
 
 def diametro(grafo):
-    diametro = nx.diameter(grafo)
+    if not checa_conexo(grafo):
+        raise Exception("O grafo não é conexo!")
+    diametro = nx.diameter(grafo, weight="weight")
     return diametro
 
 def centro(grafo):
-    centro = nx.center(grafo)
+    if not checa_conexo(grafo):
+        raise Exception("O grafo não é conexo!")
+    centro = nx.center(grafo, weight="weight")
     return centro
 
 def menor_caminho(G: nx.Graph, orig: str, dest: str):
@@ -24,8 +39,9 @@ def menor_caminho(G: nx.Graph, orig: str, dest: str):
         if not nx.has_path(G, orig, dest):
             print(f"Distância entre {orig} e {dest} é infinita")
             return
-        caminho = nx.shortest_path(G, source=orig, target=dest)
-        print(f"Distância entre {orig} e {dest} é {len(caminho)}")
+        dist = nx.shortest_path_length(G, source=orig, target=dest, weight="weight")
+        caminho = nx.shortest_path(G, source=orig, target=dest, weight="weight")
+        print(f"Distância entre {orig} e {dest} é {dist}")
         exibe_caminho("Caminho mínimo:", caminho)
     except nx.NodeNotFound:
         if orig not in G.nodes:
@@ -54,26 +70,22 @@ def busca_largura(G: nx.Graph, orig: str, arq: str):
 def centralidade_proximidade(G: nx.Graph, x: str) -> float:
     acc = 0
     for y in G.nodes():
-        dist = nx.shortest_path_length(G, source=x, target=y)
-        acc += dist # type: ignore
+        try:
+            dist = nx.shortest_path_length(G, source=x, target=y, weight="weight")
+            acc += dist # type: ignore
+        except nx.NetworkXNoPath:
+            raise Exception(f"Nem todos os outros vértices são alcançáveis de {x}!")
     res = (G.number_of_nodes() - 1) / acc
     return res
 
-def plotar_grafo_com_pesos(G):
+def plotar_grafo(G):
     try:
         pos = nx.spring_layout(G)
-
-        labels = nx.get_edge_attributes(G, 'weight')
-        edges = G.edges()
-
-        nx.draw(G, pos, with_labels=True, node_size=500, node_color='lightblue')
+        labels = nx.get_edge_attributes(G, "weight")
+        nx.draw(G, pos, with_labels=True, node_size=500)
         nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
 
-        plt.title("Grafo com Pesos nas Arestas")
+        plt.title("Grafo")
         plt.show()
     except Exception as e:
         print(f"Erro ao ler o grafo: {e}")
-
-def plotar_grafo(G):
-    nx.draw(G, with_labels=True, font_weight='bold')
-    plt.show()

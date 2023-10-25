@@ -1,18 +1,17 @@
-import lib, createGraph
-import networkx as nx
-import tkinter as tk
 import os
+import tkinter as tk
+from sys import stderr
 from tkinter import filedialog
-from sys import stderr, exit
+
+import lib
+import networkx as nx
 import matplotlib.pyplot as plt
 
-
 def limpar_tela():
-    sistema = os.name
-    if sistema == 'nt':
+    if os.name == 'nt':
         os.system('cls')
-    else:
-        os.system('clear')
+        return
+    os.system('clear')
 
 def executar_op(op: int, G: nx.Graph):
     limpar_tela()
@@ -41,20 +40,32 @@ def executar_op(op: int, G: nx.Graph):
     elif op == 6:
         # Cálculo da excentricidade de acordo com o vértice.
         v = input("Vértice: ")
-        excentricidade = lib.excentricidade(G, v)
-        print(f"Excentricidade do vértice {v}: {excentricidade}")
+        try:
+            excentricidade = lib.excentricidade(G, v)
+            print(f"Excentricidade do vértice {v}: {excentricidade}")
+        except Exception as ex:
+            print(f"Excentricidade não está definida. {ex}")
     elif op == 7:
         # Raio do Grafo.
-        raio = lib.raio(G)
-        print(f"Raio do grafo: {raio}")
+        try:
+            raio = lib.raio(G)
+            print(f"Raio do grafo: {raio}")
+        except Exception as ex:
+            print(f"O raio não está definido. {ex}")
     elif op == 8:
         # Diametro do Grafo.
-        diametroGrafo = lib.diametro(G)
-        print(f"Diâmetro do grafo: {diametroGrafo}")
+        try:
+            diametroGrafo = lib.diametro(G)
+            print(f"Diâmetro do grafo: {diametroGrafo}")
+        except Exception as ex:
+            print(f"O diâmetro não está definido. {ex}")
     elif op == 9:
         # Centro do grafo, mostra a posição do grafo.
-        centroGrafo = lib.centro(G)
-        print(f"Centro do grafo: {centroGrafo}")
+        try:
+            centroGrafo = lib.centro(G)
+            print(f"Centro do grafo: {centroGrafo}")
+        except Exception as ex:
+            print(f"O centro não está definido. {ex}")
     elif op == 10:
         # Busca em largura (BFS)
         orig = input("Vértice de origem: ")
@@ -68,8 +79,11 @@ def executar_op(op: int, G: nx.Graph):
     elif op == 12:
         # Centralidade de proximidade
         x = input("Vértice: ")
-        res = lib.centralidade_proximidade(G, x)
-        print(f"Centralidade de proximidade de {x}: {res}")
+        try:
+            res = lib.centralidade_proximidade(G, x)
+            print(f"Centralidade de proximidade de {x}: {res}")
+        except Exception as ex:
+            print(f"Não foi possível calcular a centralidade de {x}. {ex}")
     elif op == 13:
         # Plotar grafo
         lib.plotar_grafo(G)
@@ -80,13 +94,8 @@ def executar_op(op: int, G: nx.Graph):
         file_path = filedialog.askopenfilename(filetypes=[("GraphML files", "*.graphml")])
         if file_path:
             AL = nx.read_graphml(file_path)
-            nx.draw(AL, with_labels=True, font_weight='bold')
-            plt.show()
-
-    elif op == 15:
-        # Plotar grafo com pesos
-        lib.plotar_grafo_com_pesos(G)
-    # elif op == 16:
+            lib.plotar_grafo(AL)
+    # elif op == 15:
     #     # Plotar grafo com pesos e árvore de largura
     #     root = tk.Tk()
     #     root.withdraw()
@@ -95,7 +104,7 @@ def executar_op(op: int, G: nx.Graph):
     #         AL = nx.read_graphml(file_path)
     #         nx.draw(AL, with_labels=True, font_weight='bold')
     #         plt.show()
-    # elif op == 17:
+    # elif op == 16:
     #     # Plotar grafo com pesos e caminho mínimo
     #     root = tk.Tk()
     #     root.withdraw()
@@ -104,7 +113,7 @@ def executar_op(op: int, G: nx.Graph):
     #         AL = nx.read_graphml(file_path)
     #         nx.draw(AL, with_labels=True, font_weight='bold')
     #         plt.show()
-    # elif op == 18:
+    # elif op == 17:
     #     # Plotar grafo com pesos e centralidade de proximidade
     #     root = tk.Tk()
     #     root.withdraw()
@@ -113,12 +122,12 @@ def executar_op(op: int, G: nx.Graph):
     #         AL = nx.read_graphml(file_path)
     #         nx.draw(AL, with_labels=True, font_weight='bold')
     #         plt.show()
-    elif op == 19:
+    elif op == 18:
         # Voltar
         return
     else:
         # Operações não implementadas
-        print(f"Operação não implementada: '{OPS[op]}'", file=stderr)
+        print(f"Operação não implementada: '{op}'", file=stderr)
 
 
 def carregar_grafo():

@@ -1,7 +1,7 @@
 import networkx as nx
 import lib, graph
 
-def remover_vertice(G: nx.Graph, vertice: int):
+def remover_vertice(G: nx.Graph, vertice: str):
     if vertice in G.nodes:
         G.remove_node(vertice)
         print(f"Vértice {vertice} removido com sucesso.")
@@ -41,8 +41,8 @@ def criar_grafo():
         op = input("Escolha uma opção: ")
 
         if op == '1':
-            origem = int(input("Vértice de origem: "))
-            destino = int(input("Vértice de destino: "))
+            origem = input("Vértice de origem: ")
+            destino = input("Vértice de destino: ")
             peso = float(input("Peso da aresta: "))
 
             G.add_edge(origem, destino, weight=peso)
