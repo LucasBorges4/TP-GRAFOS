@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import networkx as nx
 from sys import stderr
 import matplotlib.pyplot as plt

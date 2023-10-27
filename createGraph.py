@@ -1,5 +1,5 @@
+import lib
 import networkx as nx
-import lib, graph
 
 def remover_vertice(G: nx.Graph, vertice: str):
     if vertice in G.nodes:
@@ -14,21 +14,6 @@ def adicionar_aresta(G: nx.Graph, origem: str, destino: str, peso: float):
         print(f"Aresta ({origem}, {destino}) adicionada com sucesso.")
     else:
         print(f"Vértice {origem} ou {destino} não encontrado no grafo.")
-
-def adicionar_vertice(G: nx.Graph, vertice: int):
-    if vertice not in G.nodes:
-        G.add_node(vertice)
-    else:
-        print(f"Vértice {vertice} já existe no grafo.")
-
-import networkx as nx
-import matplotlib.pyplot as plt
-
-import networkx as nx
-import matplotlib.pyplot as plt
-
-import networkx as nx
-import matplotlib.pyplot as plt
 
 def criar_grafo():
     G = nx.DiGraph()
@@ -119,6 +104,3 @@ def criar_grafo():
             break
         else:
             print("Opção inválida. Tente novamente.")
-
-
-

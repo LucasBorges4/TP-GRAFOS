@@ -1,11 +1,11 @@
+#!/usr/bin/env python3
 import os
-import tkinter as tk
 from sys import stderr
-from tkinter import filedialog
 
 import lib
+import tkinter as tk
 import networkx as nx
-import matplotlib.pyplot as plt
+from tkinter import filedialog
 
 def limpar_tela():
     if os.name == 'nt':
@@ -95,34 +95,7 @@ def executar_op(op: int, G: nx.Graph):
         if file_path:
             AL = nx.read_graphml(file_path)
             lib.plotar_grafo(AL)
-    # elif op == 15:
-    #     # Plotar grafo com pesos e árvore de largura
-    #     root = tk.Tk()
-    #     root.withdraw()
-    #     file_path = filedialog.askopenfilename(filetypes=[("GraphML files", "*.graphml")])
-    #     if file_path:
-    #         AL = nx.read_graphml(file_path)
-    #         nx.draw(AL, with_labels=True, font_weight='bold')
-    #         plt.show()
-    # elif op == 16:
-    #     # Plotar grafo com pesos e caminho mínimo
-    #     root = tk.Tk()
-    #     root.withdraw()
-    #     file_path = filedialog.askopenfilename(filetypes=[("GraphML files", "*.graphml")])
-    #     if file_path:
-    #         AL = nx.read_graphml(file_path)
-    #         nx.draw(AL, with_labels=True, font_weight='bold')
-    #         plt.show()
-    # elif op == 17:
-    #     # Plotar grafo com pesos e centralidade de proximidade
-    #     root = tk.Tk()
-    #     root.withdraw()
-    #     file_path = filedialog.askopenfilename(filetypes=[("GraphML files", "*.graphml")])
-    #     if file_path:
-    #         AL = nx.read_graphml(file_path)
-    #         nx.draw(AL, with_labels=True, font_weight='bold')
-    #         plt.show()
-    elif op == 18:
+    elif op == 15:
         # Voltar
         return
     else:
@@ -133,14 +106,11 @@ def executar_op(op: int, G: nx.Graph):
 def carregar_grafo():
     root = tk.Tk()
     root.withdraw()  # Ocultar a janela principal do tkinter
-
     file_path = filedialog.askopenfilename(filetypes=[("GraphML files", "*.graphml")])
-
-    if file_path:
-        graph = nx.read_graphml(file_path)
-        return graph
-    else:
+    if not file_path:
         return None
+    graph = nx.read_graphml(file_path)
+    return graph
 
 def carregar_grafo_site():
     root_win = tk.Tk()
@@ -154,7 +124,6 @@ def carregar_grafo_site():
     import xml.etree.ElementTree as et
     contents = et.parse(file_path)
     root = contents.getroot()
-
     g = nx.Graph()
     for aresta in root.findall(".//edge"):
         src = aresta.get("source")
