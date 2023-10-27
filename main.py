@@ -16,10 +16,7 @@ OPS = {
     12: "Centralidade de proximidade"  ,
     13: "Plotar grafo"                 ,
     14: "Plotar árvore de largura"     ,
-    # 15: "Plotar grafo com pesos e árvore de largura",
-    # 16: "Plotar grafo com pesos e caminho mínimo",
-    # 17: "Plotar grafo com pesos e centralidade de proximidade",
-    18: "Voltar",
+    15: "Voltar",
 }
 
 def main():
@@ -30,9 +27,10 @@ def main():
         print("===== MENU =====")
 
         print("1. Carregar grafo")
-        print("2. Criar grafo")
+        print("2. Carregar grafo vindo do site GraphOnline")
+        print("3. Criar grafo")
         if grafo:
-            print("3. Informações do grafo")
+            print("4. Informações do grafo")
         print ("0. Sair")
 
         op = input("Digite o número da opção escolhida: ")
@@ -48,13 +46,20 @@ def main():
                 print("Nenhum grafo foi carregado")
                 continue
         elif op == '2':
+            grafo = graph.carregar_grafo_site()
+            if grafo:
+                print(f"Grafo {grafo} lido com sucesso!")
+            else:
+                print("Nenhum grafo foi carregado")
+                continue
+        elif op == '3':
             grafo = createGraph.criar_grafo()
             if grafo:
                 print(f"Grafo {grafo} criado com sucesso!")
             else:
                 print("Nenhum grafo foi criado")
                 continue
-        elif op == '3':
+        elif op == '4':
             if grafo:
                 graph.limpar_tela()
                 print("==== OPERAÇÕES ====")

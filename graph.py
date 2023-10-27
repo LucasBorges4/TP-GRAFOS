@@ -141,3 +141,24 @@ def carregar_grafo():
         return graph
     else:
         return None
+
+def carregar_grafo_site():
+    root_win = tk.Tk()
+    root_win.withdraw() # Ocultar a janela principal do tkinter
+    file_path = filedialog.askopenfilename(filetypes=[("GraphML files", "*.graphml")])
+    if not file_path:
+        return None
+
+    # O formato dos grafos produzidos no site é ligeiramente diferente do
+    # padrão, então devemos empregar uma lógica um pouco mais sofisticada
+    import xml.etree.ElementTree as et
+    contents = et.parse(file_path)
+    root = contents.getroot()
+
+    g = nx.Graph()
+    for aresta in root.findall(".//edge"):
+        src = aresta.get("source")
+        dst = aresta.get("target")
+        w = float(aresta.get("weight")) # type: ignore
+        g.add_edge(src, dst, weight=w)
+    return g
