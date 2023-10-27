@@ -59,9 +59,11 @@ def exibe_caminho(nome: str, caminho):
 def busca_largura(G: nx.Graph, orig: str, arq: str):
     AL = nx.bfs_tree(G, orig)
     # Determina ordem de vértices percorridos
+    print("Vértices percorridos na busca em largura, em ordem:")
     for v in nx.topological_sort(AL):
         print(v)
     # Determina as arestas que não fazem parte da árvore de largura
+    print("Arestas que não fazem parte da árvore: ", end="")
     for aresta in G.edges():
         if aresta not in AL.edges():
             print(aresta)
