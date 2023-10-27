@@ -24,6 +24,12 @@ def adicionar_vertice(G: nx.Graph, vertice: int):
 import networkx as nx
 import matplotlib.pyplot as plt
 
+import networkx as nx
+import matplotlib.pyplot as plt
+
+import networkx as nx
+import matplotlib.pyplot as plt
+
 def criar_grafo():
     G = nx.DiGraph()
 
@@ -36,10 +42,13 @@ def criar_grafo():
         print("\nMenu:")
         print("1. Adicionar aresta com peso")
         print("2. Adicionar aresta sem peso")
-        print("3. Mostrar o grafo")
-        print("4. Remover vértice")
-        print("5. Salvar o grafo em um arquivo .graphml")
-        print("6. Sair")
+        print("3. Adicionar aresta não direcionada com peso")
+        print("4. Adicionar aresta não direcionada sem peso")
+        print("5. Remover aresta")
+        print("6. Remover vértice")
+        print("7. Mostrar o grafo")
+        print("8. Salvar o grafo em um arquivo .graphml")
+        print("9. Sair")
 
         op = input("Escolha uma opção: ")
 
@@ -65,16 +74,51 @@ def criar_grafo():
             else:
                 print("Pelo menos um dos vértices especificados não existe no grafo.")
         elif op == '3':
-            lib.plotar_grafo(G)  # Chama a função para plotar o grafo
+            origem = input("Vértice de origem: ")
+            destino = input("Vértice de destino: ")
+
+            # Verifique se os vértices existem antes de adicionar a aresta
+            if G.has_node(origem) and G.has_node(destino):
+                peso = float(input("Peso da aresta: "))
+                G.add_edge(origem, destino, weight=peso)
+                G.add_edge(destino, origem, weight=peso)  # Adicione a aresta no sentido oposto
+                print("Aresta não direcionada com peso adicionada.")
+            else:
+                print("Pelo menos um dos vértices especificados não existe no grafo.")
         elif op == '4':
+            origem = input("Vértice de origem: ")
+            destino = input("Vértice de destino: ")
+
+            # Verifique se os vértices existem antes de adicionar a aresta
+            if G.has_node(origem) and G.has_node(destino):
+                G.add_edge(origem, destino)
+                G.add_edge(destino, origem)  # Adicione a aresta no sentido oposto
+                print("Aresta não direcionada sem peso adicionada.")
+            else:
+                print("Pelo menos um dos vértices especificados não existe no grafo.")
+        elif op == '5':
+            origem = input("Vértice de origem da aresta a ser removida: ")
+            destino = input("Vértice de destino da aresta a ser removida: ")
+
+            # Verifique se a aresta existe antes de removê-la
+            if G.has_edge(origem, destino):
+                G.remove_edge(origem, destino)
+                print("Aresta removida.")
+            else:
+                print("Aresta não encontrada no grafo.")
+        elif op == '6':
             vertice = input("Vértice a ser removido: ")
             G.remove_node(vertice)
-        elif op == '5':
+        elif op == '7':
+            lib.plotar_grafo(G)  # Chama a função para plotar o grafo
+        elif op == '8':
             arquivo = input("Nome do arquivo .graphml para salvar (inclua a extensão .graphml): ")
             nx.write_graphml(G, arquivo)
             print(f"Grafo salvo em {arquivo}")
-        elif op == '6':
+        elif op == '9':
             break
         else:
             print("Opção inválida. Tente novamente.")
+
+
 
