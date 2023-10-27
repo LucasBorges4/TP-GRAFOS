@@ -47,7 +47,7 @@ def criar_grafo():
 
             G.add_edge(origem, destino, weight=peso)
         elif op == '2':
-            lib.plotar_grafo_com_pesos(G)
+            lib.plotar_grafo(G)
         elif op == '3':
             vertice = input("Vértice a ser removido: ")
             remover_vertice(G, vertice)
