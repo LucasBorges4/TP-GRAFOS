@@ -90,3 +90,19 @@ def plotar_grafo(G):
         plt.show()
     except Exception as e:
         print(f"Erro ao ler o grafo: {e}")
+
+# Heurística de conjunto de estabilidade
+def conjunto_estabilidade(G):
+    S = []
+    # Cria uma lista dos nós ordenados pelo grau (crescente)
+    nos = [v for v, _ in sorted(G.degree, key=lambda x: x[1])]
+    while len(nos) > 0:
+        v = nos.pop() # vértice de maior grau
+        S.append(v)
+        # Remove tanto o vértice de maior grau quanto os seus vizinhos
+        # da lista de nós restantes
+        nos = [w for w in nos if w not in G.adj[v]]
+    return S
+
+def emparelhamento_maximo(G):
+    return nx.max_weight_matching(G)

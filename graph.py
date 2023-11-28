@@ -95,7 +95,16 @@ def executar_op(op: int, G: nx.Graph):
         if file_path:
             AL = nx.read_graphml(file_path)
             lib.plotar_grafo(AL)
-    elif op == 15:
+    elif op == 18:
+        # Conjunto de estabilidade (heurística)
+        S = lib.conjunto_estabilidade(G)
+        print("Conjunto de estabilidade:", S)
+    elif op == 19:
+        # Emparelhamento máximo
+        arestas = lib.emparelhamento_maximo(G)
+        print("Emparelhamento máximo tem tamanho", len(arestas))
+        print("Arestas no emparelhamento:", arestas)
+    elif op == 20:
         # Voltar
         return
     else:
