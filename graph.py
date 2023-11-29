@@ -2,9 +2,9 @@
 import os
 from sys import stderr
 
+import networkx as nx
 import lib
 import tkinter as tk
-import networkx as nx
 from tkinter import filedialog
 
 def limpar_tela():
@@ -95,6 +95,26 @@ def executar_op(op: int, G: nx.Graph):
         if file_path:
             AL = nx.read_graphml(file_path)
             lib.plotar_grafo(AL)
+    elif op == 15:
+        # Verifica ciclo
+        if lib.verifica_ciclo(G):
+            print("O grafo possui ciclo")
+        else:
+            print("O grafo não possui ciclo")
+    elif op == 16:
+        # Encontra o menor ciclo
+        ciclo, menor = lib.menor_ciclo(G)
+        if ciclo is not None:
+            print(f"Menor ciclo: {ciclo}, Peso: {menor}")
+        else:
+            print("O grafo não possui ciclo")
+    elif op == 17:
+        # Encontrar a árvore geradora mínima
+        arquivo = input("Nome do arquivo .graphml para salvar (inclua a extensão .graphml): ")
+        peso = lib.arvore_geradora_minima(G, arquivo)
+        if peso is not None:
+            lib.plotar_grafo(nx.read_graphml(arquivo))
+            print(f"Peso da árvore geradora mínima: {peso}")
     elif op == 18:
         # Conjunto de estabilidade (heurística)
         S = lib.conjunto_estabilidade(G)

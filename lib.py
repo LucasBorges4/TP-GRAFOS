@@ -106,3 +106,78 @@ def conjunto_estabilidade(G):
 
 def emparelhamento_maximo(G):
     return nx.max_weight_matching(G)
+
+def verifica_ciclo(G):
+    try:
+        if G.is_directed():
+            cycles = nx.simple_cycles(G)
+        else:
+            cycles = nx.cycle_basis(G)
+        return any(cycles)
+    except nx.NetworkXNoCycle:
+        return False
+
+def menor_ciclo(G):
+    if verifica_ciclo(G):
+        
+        menor_ciclo = None
+        menor_peso = float('inf')
+        
+        is_ponderado = any('weight' in G[u][v] for u, v in G.edges)
+        
+        if G.is_directed():
+            # Usar find_cycle para grafos direcionados
+            for ciclo in nx.simple_cycles(G):
+                if is_ponderado:
+                    peso_ciclo = sum(G.get_edge_data(u, v)['weight'] for u, v in zip(ciclo, ciclo[1:] + [ciclo[0]]))
+                else:
+                    peso_ciclo = len(ciclo)
+                    
+                if peso_ciclo < menor_peso:
+                    menor_ciclo = ciclo
+                    menor_peso = peso_ciclo
+                    
+        else:
+            # Usar find_cycle para grafos não direcionados
+            for ciclo in nx.cycle_basis(G):
+                if is_ponderado:
+                    peso_ciclo = sum(G.get_edge_data(u, v)['weight'] for u, v in zip(ciclo, ciclo[1:] + [ciclo[0]]))
+                else:
+                    peso_ciclo = len(ciclo)
+                    
+                if peso_ciclo < menor_peso:
+                    menor_ciclo = ciclo
+                    menor_peso = peso_ciclo
+                    
+        return menor_ciclo, menor_peso
+    
+    else:
+        return None, float('inf')
+    
+def arvore_geradora_minima(G, arquivo):
+    try:
+        is_ponderado = any('weight' in G[u][v] for u, v in G.edges)
+        
+        if G.is_directed():
+            if not nx.is_strongly_connected(G):
+                raise nx.NetworkXError("O grafo não é fortemente conexo!")
+            else:
+                agm = nx.minimum_spanning_arborescence(G)
+        else:
+            agm = nx.minimum_spanning_tree(G)
+            
+        if not agm.edges:
+            raise nx.NetworkXError("O grafo não possui uma árvore geradora mínima!")
+        
+        if is_ponderado:
+            peso_total = sum(G.get_edge_data(u, v)['weight'] for u, v in agm.edges)
+        else:
+            peso_total = sum(1 for _ in agm.edges)
+        
+        nx.write_graphml(agm, arquivo)
+        
+        return peso_total
+    
+    except nx.NetworkXError as e:
+        print(f'Erro: {e}')
+        return None

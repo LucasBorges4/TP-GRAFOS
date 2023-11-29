@@ -58,7 +58,7 @@ def main():
                 print("Nenhum grafo foi carregado")
                 continue
         elif op == '3':
-            grafo = createGraph.criar_grafo()
+            createGraph.criar_grafo()
             if grafo:
                 print(f"Grafo {grafo} criado com sucesso!")
             else:
