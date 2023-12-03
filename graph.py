@@ -121,9 +121,12 @@ def executar_op(op: int, G: nx.Graph):
         print("Conjunto de estabilidade:", S)
     elif op == 19:
         # Emparelhamento máximo
-        arestas = lib.emparelhamento_maximo(G)
-        print("Emparelhamento máximo tem tamanho", len(arestas))
-        print("Arestas no emparelhamento:", arestas)
+        try:
+            arestas = lib.emparelhamento_maximo(G)
+            print("Emparelhamento máximo tem tamanho", len(arestas))
+            print("Arestas no emparelhamento:", arestas)
+        except Exception as ex:
+            print(f"Não foi possível determinar o emparelhamento máximo. {ex}")
     elif op == 20:
         # Voltar
         return
